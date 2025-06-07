@@ -8,6 +8,23 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
+type SectionWithSubtitle = {
+  title: string;
+  subtitle: string;
+};
+
+type SectionWithContent = {
+  title: string;
+  content: string;
+};
+
+type SectionContent = {
+  header: SectionWithSubtitle;
+  about: SectionWithContent;
+  services: SectionWithContent;
+  contact: SectionWithContent;
+};
+
 const EditSite = () => {
   const { id } = useParams();
   const [selectedSection, setSelectedSection] = useState("header");
@@ -20,7 +37,7 @@ const EditSite = () => {
     { id: "contact", name: "Contact" }
   ];
 
-  const [sectionContent, setSectionContent] = useState({
+  const [sectionContent, setSectionContent] = useState<SectionContent>({
     header: {
       title: "Welcome to Bella Vista Restaurant",
       subtitle: "Authentic Italian Cuisine in the Heart of the City"
@@ -48,10 +65,22 @@ const EditSite = () => {
     setSectionContent(prev => ({
       ...prev,
       [section]: {
-        ...prev[section as keyof typeof prev],
+        ...prev[section as keyof SectionContent],
         [field]: value
       }
     }));
+  };
+
+  const getCurrentSection = () => {
+    return sectionContent[selectedSection as keyof SectionContent];
+  };
+
+  const hasSubtitle = (section: any): section is SectionWithSubtitle => {
+    return 'subtitle' in section;
+  };
+
+  const hasContent = (section: any): section is SectionWithContent => {
+    return 'content' in section;
   };
 
   return (
@@ -132,30 +161,30 @@ const EditSite = () => {
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
-                  value={sectionContent[selectedSection as keyof typeof sectionContent].title}
+                  value={getCurrentSection().title}
                   onChange={(e) => updateSectionContent(selectedSection, "title", e.target.value)}
                   className="mt-1"
                 />
               </div>
               
-              {sectionContent[selectedSection as keyof typeof sectionContent].subtitle && (
+              {hasSubtitle(getCurrentSection()) && (
                 <div>
                   <Label htmlFor="subtitle">Subtitle</Label>
                   <Input
                     id="subtitle"
-                    value={sectionContent[selectedSection as keyof typeof sectionContent].subtitle}
+                    value={getCurrentSection().subtitle}
                     onChange={(e) => updateSectionContent(selectedSection, "subtitle", e.target.value)}
                     className="mt-1"
                   />
                 </div>
               )}
               
-              {sectionContent[selectedSection as keyof typeof sectionContent].content && (
+              {hasContent(getCurrentSection()) && (
                 <div>
                   <Label htmlFor="content">Content</Label>
                   <Textarea
                     id="content"
-                    value={sectionContent[selectedSection as keyof typeof sectionContent].content}
+                    value={getCurrentSection().content}
                     onChange={(e) => updateSectionContent(selectedSection, "content", e.target.value)}
                     className="mt-1"
                     rows={4}
@@ -170,24 +199,24 @@ const EditSite = () => {
             <h3 className="font-semibold mb-4">Live Preview</h3>
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 min-h-[400px]">
               <div className="space-y-6">
-                {selectedSection === "header" && (
+                {selectedSection === "header" && hasSubtitle(getCurrentSection()) && (
                   <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                      {sectionContent.header.title}
+                      {getCurrentSection().title}
                     </h1>
                     <p className="text-gray-600">
-                      {sectionContent.header.subtitle}
+                      {getCurrentSection().subtitle}
                     </p>
                   </div>
                 )}
                 
-                {selectedSection !== "header" && (
+                {selectedSection !== "header" && hasContent(getCurrentSection()) && (
                   <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-3">
-                      {sectionContent[selectedSection as keyof typeof sectionContent].title}
+                      {getCurrentSection().title}
                     </h2>
                     <p className="text-gray-700">
-                      {sectionContent[selectedSection as keyof typeof sectionContent].content}
+                      {getCurrentSection().content}
                     </p>
                   </div>
                 )}

@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Bot, ExternalLink, Edit, MessageSquare, Settings } from "lucide-react";
+import { Bot, ExternalLink, Edit, MessageSquare, Settings, Plus, Eye } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
 const Dashboard = () => {
