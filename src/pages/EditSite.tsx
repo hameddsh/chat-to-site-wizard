@@ -199,25 +199,29 @@ const EditSite = () => {
             <h3 className="font-semibold mb-4">Live Preview</h3>
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 min-h-[400px]">
               <div className="space-y-6">
-                {selectedSection === "header" && hasSubtitle(getCurrentSection()) && (
+                {selectedSection === "header" && (
                   <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">
                       {getCurrentSection().title}
                     </h1>
-                    <p className="text-gray-600">
-                      {getCurrentSection().subtitle}
-                    </p>
+                    {hasSubtitle(getCurrentSection()) && (
+                      <p className="text-gray-600">
+                        {getCurrentSection().subtitle}
+                      </p>
+                    )}
                   </div>
                 )}
                 
-                {selectedSection !== "header" && hasContent(getCurrentSection()) && (
+                {selectedSection !== "header" && (
                   <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-3">
                       {getCurrentSection().title}
                     </h2>
-                    <p className="text-gray-700">
-                      {getCurrentSection().content}
-                    </p>
+                    {hasContent(getCurrentSection()) && (
+                      <p className="text-gray-700">
+                        {getCurrentSection().content}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
