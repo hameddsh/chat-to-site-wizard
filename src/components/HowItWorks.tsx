@@ -1,35 +1,28 @@
 
-import { MessageSquare, Bot, Code, Building } from "lucide-react";
+import { MessageSquare, Bot, Check } from "lucide-react";
 
 const HowItWorks = () => {
   const steps = [
     {
       step: "01",
       icon: <MessageSquare className="h-8 w-8 text-white" />,
-      title: "Start the Conversation",
-      description: "Open our Telegram bot or web platform and tell us about your business in your own words - Persian or English.",
+      title: "Chat with the Telegram Bot",
+      description: "Start a conversation with our intelligent bot. It will ask you questions about your business and collect all the information needed to create your perfect website.",
       color: "bg-blue-600"
     },
     {
       step: "02",
       icon: <Bot className="h-8 w-8 text-white" />,
-      title: "AI Analyzes Your Needs",
-      description: "Our intelligent system asks follow-up questions and creates a detailed project brief based on your responses.",
+      title: "AI Generates Your Website",
+      description: "Our AI analyzes your responses and automatically creates a complete, custom website with content, design, and functionality tailored to your business.",
       color: "bg-violet-600"
     },
     {
       step: "03",
-      icon: <Code className="h-8 w-8 text-white" />,
-      title: "Website Generation",
-      description: "AI selects the perfect template and generates your custom website with content, design, and functionality.",
+      icon: <Check className="h-8 w-8 text-white" />,
+      title: "Review and Launch",
+      description: "Review your generated website, make any final adjustments using our live editor, and launch your professional site to the world in minutes.",
       color: "bg-blue-600"
-    },
-    {
-      step: "04",
-      icon: <Building className="h-8 w-8 text-white" />,
-      title: "Review & Launch",
-      description: "Make real-time edits, review through our admin dashboard, and launch your professional website.",
-      color: "bg-violet-600"
     }
   ];
 
@@ -41,12 +34,12 @@ const HowItWorks = () => {
             How It Works
           </h2>
           <p className="mt-4 text-lg leading-8 text-gray-600">
-            From conversation to website in just four simple steps
+            From conversation to website in just three simple steps
           </p>
         </div>
 
         <div className="mx-auto mt-16 max-w-6xl">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {steps.map((step, index) => (
               <div key={index} className="relative">
                 {/* Connection line for desktop */}
