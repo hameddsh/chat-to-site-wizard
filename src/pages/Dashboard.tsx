@@ -1,8 +1,9 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Edit, MessageSquare, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Bot, ExternalLink, Edit, MessageSquare, Settings } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
 const Dashboard = () => {
