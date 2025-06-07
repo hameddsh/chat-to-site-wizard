@@ -1,5 +1,5 @@
 
-import type { SectionContent, SectionWithSubtitle, SectionWithContent } from "@/types/editSite";
+import type { SectionContent } from "@/types/editSite";
 
 interface LivePreviewProps {
   selectedSection: string;
@@ -9,14 +9,6 @@ interface LivePreviewProps {
 const LivePreview = ({ selectedSection, sectionContent }: LivePreviewProps) => {
   const getCurrentSection = () => {
     return sectionContent[selectedSection as keyof SectionContent];
-  };
-
-  const hasSubtitle = (section: any): section is SectionWithSubtitle => {
-    return 'subtitle' in section;
-  };
-
-  const hasContent = (section: any): section is SectionWithContent => {
-    return 'content' in section;
   };
 
   const currentSection = getCurrentSection();
@@ -31,7 +23,7 @@ const LivePreview = ({ selectedSection, sectionContent }: LivePreviewProps) => {
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 {currentSection.title}
               </h1>
-              {hasSubtitle(currentSection) && (
+              {"subtitle" in currentSection && (
                 <p className="text-gray-600">
                   {currentSection.subtitle}
                 </p>
@@ -44,7 +36,7 @@ const LivePreview = ({ selectedSection, sectionContent }: LivePreviewProps) => {
               <h2 className="text-xl font-semibold text-gray-900 mb-3">
                 {currentSection.title}
               </h2>
-              {hasContent(currentSection) && (
+              {"content" in currentSection && (
                 <p className="text-gray-700">
                   {currentSection.content}
                 </p>

@@ -15,14 +15,6 @@ const EditorPanel = ({ selectedSection, sectionContent, onUpdateContent }: Edito
     return sectionContent[selectedSection as keyof SectionContent];
   };
 
-  const hasSubtitle = (section: any): section is SectionWithSubtitle => {
-    return 'subtitle' in section;
-  };
-
-  const hasContent = (section: any): section is SectionWithContent => {
-    return 'content' in section;
-  };
-
   const currentSection = getCurrentSection();
 
   return (
@@ -40,7 +32,7 @@ const EditorPanel = ({ selectedSection, sectionContent, onUpdateContent }: Edito
           />
         </div>
         
-        {hasSubtitle(currentSection) && (
+        {"subtitle" in currentSection && (
           <div>
             <Label htmlFor="subtitle">Subtitle</Label>
             <Input
@@ -52,7 +44,7 @@ const EditorPanel = ({ selectedSection, sectionContent, onUpdateContent }: Edito
           </div>
         )}
         
-        {hasContent(currentSection) && (
+        {"content" in currentSection && (
           <div>
             <Label htmlFor="content">Content</Label>
             <Textarea
