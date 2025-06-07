@@ -1,6 +1,6 @@
-
 import { Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const FinalCTA = () => {
   return (
@@ -14,13 +14,15 @@ const FinalCTA = () => {
           Talk to the bot. Get your custom website. Launch fast.
         </p>
         
-        <Button 
-          size="lg" 
-          className="bg-white text-blue-600 px-12 py-6 text-xl font-semibold hover:bg-gray-50 transition-colors"
-        >
-          <Bot className="mr-3 h-6 w-6" />
-          Try the AI Bot Now
-        </Button>
+        <Link to="/signup">
+          <Button 
+            size="lg" 
+            className="bg-white text-blue-600 px-12 py-6 text-xl font-semibold hover:bg-gray-50 transition-colors"
+          >
+            <Bot className="mr-3 h-6 w-6" />
+            Try the AI Bot Now
+          </Button>
+        </Link>
         
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <div className="flex items-center space-x-2 text-blue-100">
