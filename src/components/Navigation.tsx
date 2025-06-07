@@ -1,18 +1,15 @@
-
 import { Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const Navigation = () => {
-  return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+  return <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <div className="rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 p-2">
               <Bot className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900">Promptsy</span>
+            <span className="text-xl font-bold text-gray-900">webloom</span>
           </Link>
           
           <div className="hidden md:flex items-center space-x-8">
@@ -44,8 +41,6 @@ const Navigation = () => {
           </div>
         </div>
       </div>
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navigation;
