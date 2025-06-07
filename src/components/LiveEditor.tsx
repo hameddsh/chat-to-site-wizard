@@ -1,5 +1,5 @@
 
-import { Bot, Laptop } from "lucide-react";
+import { Bot, Laptop, Check } from "lucide-react";
 
 const LiveEditor = () => {
   return (
