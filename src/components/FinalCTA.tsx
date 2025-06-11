@@ -1,3 +1,4 @@
+
 import { Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -14,7 +15,7 @@ const FinalCTA = () => {
           Talk to the bot. Get your custom website. Launch fast.
         </p>
         
-        <Link to="/signup">
+        <Link to="/ai-chat">
           <Button 
             size="lg" 
             className="bg-white text-blue-600 px-12 py-6 text-xl font-semibold hover:bg-gray-50 transition-colors"

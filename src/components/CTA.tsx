@@ -1,6 +1,7 @@
 
 import { Bot, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -15,21 +16,25 @@ const CTA = () => {
         </p>
         
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button 
-            size="lg" 
-            className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold hover:bg-gray-50 transition-colors"
-          >
-            <Bot className="mr-2 h-5 w-5" />
-            Start Building Your Website with AI
-          </Button>
-          <Button 
-            variant="outline" 
-            size="lg" 
-            className="border-white text-white px-8 py-4 text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-          >
-            <MessageSquare className="mr-2 h-5 w-5" />
-            Chat with Our Bot
-          </Button>
+          <Link to="/ai-chat">
+            <Button 
+              size="lg" 
+              className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold hover:bg-gray-50 transition-colors"
+            >
+              <Bot className="mr-2 h-5 w-5" />
+              Start Building Your Website with AI
+            </Button>
+          </Link>
+          <Link to="/ai-chat">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-white text-white px-8 py-4 text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+            >
+              <MessageSquare className="mr-2 h-5 w-5" />
+              Chat with Our Bot
+            </Button>
+          </Link>
         </div>
         
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

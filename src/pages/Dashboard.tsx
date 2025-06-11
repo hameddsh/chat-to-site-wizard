@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Bot, ExternalLink, Edit, MessageSquare, Settings, Plus, Eye } from "lucide-react";
+import { Bot, Edit, Plus, Eye, MessageSquare } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
 const Dashboard = () => {
@@ -13,21 +13,21 @@ const Dashboard = () => {
       id: 1,
       name: "My Restaurant Website",
       status: "Published",
-      previewUrl: "#",
+      previewUrl: "/site-preview/1",
       createdAt: "2024-01-15"
     },
     {
       id: 2,
       name: "Photography Portfolio",
       status: "Draft",
-      previewUrl: "#",
+      previewUrl: "/site-preview/2",
       createdAt: "2024-01-10"
     },
     {
       id: 3,
       name: "Online Store",
       status: "In Review",
-      previewUrl: "#",
+      previewUrl: "/site-preview/3",
       createdAt: "2024-01-08"
     }
   ];
@@ -85,10 +85,12 @@ const Dashboard = () => {
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">Your Websites</h2>
-              <Button className="bg-gradient-to-r from-blue-600 to-violet-600">
-                <Plus className="h-4 w-4 mr-2" />
-                Create New Website
-              </Button>
+              <Link to="/ai-chat">
+                <Button className="bg-gradient-to-r from-blue-600 to-violet-600">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Website
+                </Button>
+              </Link>
             </div>
           </div>
           
@@ -105,14 +107,18 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Preview
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit Site
-                  </Button>
+                  <Link to={website.previewUrl}>
+                    <Button variant="outline" size="sm">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview
+                    </Button>
+                  </Link>
+                  <Link to={`/edit-site/${website.id}`}>
+                    <Button variant="outline" size="sm">
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Site
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -124,10 +130,12 @@ const Dashboard = () => {
           <p className="text-gray-600 mb-4">
             Our support team is here to help you create the perfect website.
           </p>
-          <Button variant="outline">
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Request Support
-          </Button>
+          <Link to="/support">
+            <Button variant="outline">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Request Support
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
