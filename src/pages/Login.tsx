@@ -26,10 +26,10 @@ const Login = () => {
       if (!response.ok) {
         // Handle error (e.g., show message)
         const error = await response.json();
-        alert(error.message || "Login failed");
+
         toast({
           title: "Error",
-          description: error.response?.data?.message || "Login failed",
+          description: error.message || "Login failed",
           variant: "destructive",
         });
         return;
@@ -44,7 +44,7 @@ const Login = () => {
     } catch (err) {
       toast({
         title: "Error",
-        description: err.response?.data?.message || "Login failed",
+        description: err.message || "Login failed",
         variant: "destructive",
       });
     }

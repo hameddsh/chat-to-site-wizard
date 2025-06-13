@@ -36,10 +36,9 @@ const SignUp = () => {
       if (!response.ok) {
         // Handle error (e.g., show message)
         const error = await response.json();
-        alert(error.message || "Signup failed");
         toast({
           title: "Error",
-          description: error.response?.data?.message || "Sign up failed",
+          description: error.message || "Sign up failed",
           variant: "destructive",
         });
         return;
@@ -56,12 +55,10 @@ const SignUp = () => {
 
       toast({
         title: "Error",
-        description: err.response?.data?.message || "Sign up failed",
+        description: err.message || "Sign up failed",
         variant: "destructive",
       });
     }
-    console.log("Sign up form submitted:", formData);
-    // Add sign up logic here
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
