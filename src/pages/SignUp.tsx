@@ -17,6 +17,12 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const [toast, setToast] = useState<{
+        show: boolean;
+        message: string;
+        type: "success" | "error" | "info";
+    }>({ show: false, message: "", type: "info" });
+
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     try{
@@ -29,14 +35,29 @@ const SignUp = () => {
       // Handle error (e.g., show message)
       const error = await response.json();
       alert(error.message || "Signup failed");
+      setToast({
+                show: true,
+                message: 'errorMessage',
+                type: "error"
+            })
       return;
     }
     // Handle success (e.g., redirect or show success message)
-    alert("Signup successful! Please log in.");
+    setToast({
+                show: true,
+                message: "Account created successfully!",
+                type: "success"
+            })
     // Optionally redirect to login page
     // navigate("/login");
   } catch (err) {
     alert("Network error. Please try again.");
+
+    setToast({
+                show: true,
+                message: 'errorMessage',
+                type: "error"
+            })
   }
     console.log("Sign up form submitted:", formData);
     // Add sign up logic here
@@ -134,6 +155,20 @@ const SignUp = () => {
           </Link>
         </p>
       </div>
+      {toast.show && (
+                <div className={`fixed bottom-4 right-4 ${
+                    toast.type === 'success' ? 'bg-green-500' : 
+                    toast.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                } text-white px-6 py-3 rounded-lg shadow-lg`}>
+                    {toast.message}
+                    <button 
+                        onClick={() => setToast({...toast, show: false})}
+                        className="ml-4"
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
     </div>
   );
 };
