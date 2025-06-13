@@ -1,64 +1,65 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { Bot } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const SignUp = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
-    const [toast, setToast] = useState<{
-        show: boolean;
-        message: string;
-        type: "success" | "error" | "info";
-    }>({ show: false, message: "", type: "info" });
+  // const [toast, setToast] = useState<{
+  //     show: boolean;
+  //     message: string;
+  //     type: "success" | "error" | "info";
+  // }>({ show: false, message: "", type: "info" });
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try{
-    const response = await fetch("http://localhost:3000/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if (!response.ok) {
-      // Handle error (e.g., show message)
-      const error = await response.json();
-      alert(error.message || "Signup failed");
-      setToast({
-                show: true,
-                message: 'errorMessage',
-                type: "error"
-            })
-      return;
-    }
-    // Handle success (e.g., redirect or show success message)
-    setToast({
-                show: true,
-                message: "Account created successfully!",
-                type: "success"
-            })
-    // Optionally redirect to login page
-    // navigate("/login");
-  } catch (err) {
-    alert("Network error. Please try again.");
 
-    setToast({
-                show: true,
-                message: 'errorMessage',
-                type: "error"
-            })
-  }
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        // Handle error (e.g., show message)
+        const error = await response.json();
+        alert(error.message || "Signup failed");
+        toast({
+          title: "Error",
+          description: error.response?.data?.message || "Sign up failed",
+          variant: "destructive",
+        });
+        return;
+      }
+      // Handle success (e.g., redirect or show success message)
+      toast({
+        title: "Success",
+        description: "Account created successfully!",
+      });
+      // Optionally redirect to login page
+      // navigate("/login");
+    } catch (err) {
+      alert("Network error. Please try again.");
+
+      toast({
+        title: "Error",
+        description: err.response?.data?.message || "Sign up failed",
+        variant: "destructive",
+      });
+    }
     console.log("Sign up form submitted:", formData);
     // Add sign up logic here
   };
@@ -66,7 +67,7 @@ const SignUp = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -79,8 +80,12 @@ const SignUp = () => {
               <Bot className="h-8 w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Your Account</h1>
-          <p className="text-gray-600 mt-2">Start building websites with AI in minutes</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Create Your Account
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Start building websites with AI in minutes
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -150,25 +155,14 @@ const SignUp = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+          <Link
+            to="/login"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
             Sign in
           </Link>
         </p>
       </div>
-      {toast.show && (
-                <div className={`fixed bottom-4 right-4 ${
-                    toast.type === 'success' ? 'bg-green-500' : 
-                    toast.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-                } text-white px-6 py-3 rounded-lg shadow-lg`}>
-                    {toast.message}
-                    <button 
-                        onClick={() => setToast({...toast, show: false})}
-                        className="ml-4"
-                    >
-                        ×
-                    </button>
-                </div>
-            )}
     </div>
   );
 };
