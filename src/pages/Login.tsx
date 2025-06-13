@@ -15,7 +15,6 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login form submitted:", formData);
     // Add login logic here
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
