@@ -2,12 +2,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bot } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
 
-const SignUp = () => {
-  const { toast } = useToast();
+const SIGNUP_API_URL = "http://localhost:3000/auth/register";
+const TOKEN_KEY = "token";
+
+// Handles form state and submission
+const useSignUpForm = (
+  onSuccess: (fullName: string, email: string, accessToken: string) => void,
+  onError: (message: string) => void
+) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -15,58 +22,57 @@ const SignUp = () => {
     confirmPassword: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // const [toast, setToast] = useState<{
-  //     show: boolean;
-  //     message: string;
-  //     type: "success" | "error" | "info";
-  // }>({ show: false, message: "", type: "info" });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (formData.password !== formData.confirmPassword) {
+      onError("Passwords do not match");
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(SIGNUP_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        // Handle error (e.g., show message)
         const error = await response.json();
-        toast({
-          title: "Error",
-          description: error.message || "Sign up failed",
-          variant: "destructive",
-        });
+        onError(error.message || "Sign up failed");
         return;
       }
-      // Handle success (e.g., redirect or show success message)
-      toast({
-        title: "Success",
-        description: "Account created successfully!",
-      });
-      // Optionally redirect to login page
-      // navigate("/login");
-    } catch (err) {
-      alert("Network error. Please try again.");
-
-      toast({
-        title: "Error",
-        description: err.message || "Sign up failed",
-        variant: "destructive",
-      });
+      const { accessToken, fullName } = await response.json();
+      onSuccess(fullName, formData.email, accessToken);
+    } catch (err: any) {
+      onError(err.message || "Network error. Please try again.");
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  return { formData, handleChange, handleSubmit };
+};
+
+const SignUp = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const onSuccess = (fullName: string, email: string, accessToken: string) => {
+    localStorage.setItem(TOKEN_KEY, accessToken);
+    login({ name: fullName, email });
+    navigate("/");
+    toast({ title: "Success", description: "Account created successfully!" });
   };
+
+  const onError = (message: string) => {
+    toast({ title: "Error", description: message, variant: "destructive" });
+  };
+
+  const { formData, handleChange, handleSubmit } = useSignUpForm(
+    onSuccess,
+    onError
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-violet-50 flex items-center justify-center px-6">
@@ -99,7 +105,6 @@ const SignUp = () => {
               placeholder="Enter your full name"
             />
           </div>
-
           <div>
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -113,7 +118,6 @@ const SignUp = () => {
               placeholder="Enter your email"
             />
           </div>
-
           <div>
             <Label htmlFor="password">Password</Label>
             <Input
@@ -127,7 +131,6 @@ const SignUp = () => {
               placeholder="Create a password"
             />
           </div>
-
           <div>
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
@@ -141,7 +144,6 @@ const SignUp = () => {
               placeholder="Confirm your password"
             />
           </div>
-
           <Button
             type="submit"
             className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700"

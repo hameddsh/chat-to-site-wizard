@@ -2,59 +2,73 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bot } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
 
-const Login = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+// Extracted constants for API endpoint and localStorage key
+const LOGIN_API_URL = "http://localhost:3000/auth/login";
+const TOKEN_KEY = "token";
+
+// Single Responsibility: Handles form state and submission
+const useLoginForm = (
+  onSuccess: (fullName: string) => void,
+  onError: (message: string) => void
+) => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add login logic here
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(LOGIN_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) {
-        // Handle error (e.g., show message)
-        const error = await response.json();
 
-        toast({
-          title: "Error",
-          description: error.message || "Login failed",
-          variant: "destructive",
-        });
+      if (!response.ok) {
+        const error = await response.json();
+        onError(error.message || "Login failed");
         return;
       }
-      // Handle success (e.g., redirect or show success message)
-      toast({
-        title: "Success",
-        description: "Logged in successfully!",
-      });
-      // Optionally redirect to login page
-      // navigate("/login");
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: err.message || "Login failed",
-        variant: "destructive",
-      });
+
+      const { accessToken, fullName } = await response.json();
+      localStorage.setItem(TOKEN_KEY, accessToken);
+      onSuccess(fullName);
+    } catch (err: any) {
+      onError(err.message || "Login failed");
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  return { formData, handleChange, handleSubmit };
+};
+
+const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { toast } = useToast();
+
+  // Open/Closed: Toast and navigation logic are injected as callbacks
+  const onSuccess = (fullName: string) => {
+    login({ name: fullName, email: formData.email });
+    navigate("/");
+    toast({ title: "Success", description: "Logged in successfully!" });
   };
+
+  const onError = (message: string) => {
+    toast({ title: "Error", description: message, variant: "destructive" });
+  };
+
+  // Liskov: useLoginForm returns a consistent interface
+  const { formData, handleChange, handleSubmit } = useLoginForm(
+    onSuccess,
+    onError
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-violet-50 flex items-center justify-center px-6">
