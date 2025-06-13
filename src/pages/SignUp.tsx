@@ -14,8 +14,30 @@ const SignUp = () => {
     confirmPassword: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
+    try{
+    const response = await fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    if (!response.ok) {
+      // Handle error (e.g., show message)
+      const error = await response.json();
+      alert(error.message || "Signup failed");
+      return;
+    }
+    // Handle success (e.g., redirect or show success message)
+    alert("Signup successful! Please log in.");
+    // Optionally redirect to login page
+    // navigate("/login");
+  } catch (err) {
+    alert("Network error. Please try again.");
+  }
     console.log("Sign up form submitted:", formData);
     // Add sign up logic here
   };
