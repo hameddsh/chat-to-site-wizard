@@ -12,10 +12,29 @@ const Login = () => {
     password: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login form submitted:", formData);
     // Add login logic here
+    try{
+    const response = await fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    if (!response.ok) {
+      // Handle error (e.g., show message)
+      const error = await response.json();
+      alert(error.message || "Login failed");
+      return;
+    }
+    // Handle success (e.g., redirect or show success message)
+    alert("Login successful! Welcome back.");
+    // Optionally redirect to login page
+    // navigate("/login");
+  } catch (err) {
+    alert("Network error. Please try again.");
+  }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
